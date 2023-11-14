@@ -1,0 +1,43 @@
+﻿<!--
+	Para entrar a la pagina es el page
+	pages:
+		counter.razor...... arrobapage"/counter"
+		prueba.razor........ arrobapage "/pueba/paginaPrueba"
+-->
+@page "/counter"
+<!--Nombre de la pagina-->
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p>Cunrret count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Más</button>
+<button class="btn btn-secondary" @onclick="DecrementCount">Menos</button>
+
+<!--Lo que este con arroba es de c#-->
+@code{
+	private int currentCount=0; 
+
+	private void IncrementCount()
+	{
+		currentCount++;
+		Console.WriteLine(currentCount); 
+	}
+	private void DecrementCount()
+	{
+		
+		if (currentCount>0)
+		{
+			currentCount--; 
+			Console.WriteLine(currentCount);
+		}
+		else
+		{
+			Console.WriteLine("Ya no jala, no se pueden numero negativos");
+		}
+		
+	}
+}
+
+
