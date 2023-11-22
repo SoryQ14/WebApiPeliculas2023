@@ -22,6 +22,21 @@ namespace WebApiPeliculas2023.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("GeneroPelicula", b =>
+                {
+                    b.Property<int>("GenerosId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Peliculasid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("GenerosId", "Peliculasid");
+
+                    b.HasIndex("Peliculasid");
+
+                    b.ToTable("GeneroPelicula");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -236,25 +251,6 @@ namespace WebApiPeliculas2023.Migrations
                     b.ToTable("Generos");
                 });
 
-            modelBuilder.Entity("WebApiPeliculas2023.Models.GeneroPelicula", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdGenero")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdPeliculas")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GenerosPeliculas");
-                });
-
             modelBuilder.Entity("WebApiPeliculas2023.Models.Opinion", b =>
                 {
                     b.Property<int>("Id")
@@ -276,10 +272,17 @@ namespace WebApiPeliculas2023.Migrations
                     b.Property<int>("IdPelicula")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdUsuario")
+                    b.Property<int>("Peliculaid")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Peliculaid");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Opiniones");
                 });
@@ -335,16 +338,31 @@ namespace WebApiPeliculas2023.Migrations
                     b.Property<int>("Edad")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("GeneroPelicula", b =>
+                {
+                    b.HasOne("WebApiPeliculas2023.Models.Genero", null)
+                        .WithMany()
+                        .HasForeignKey("GenerosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApiPeliculas2023.Models.Pelicula", null)
+                        .WithMany()
+                        .HasForeignKey("Peliculasid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -396,6 +414,35 @@ namespace WebApiPeliculas2023.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApiPeliculas2023.Models.Opinion", b =>
+                {
+                    b.HasOne("WebApiPeliculas2023.Models.Pelicula", "Pelicula")
+                        .WithMany("Opinion")
+                        .HasForeignKey("Peliculaid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApiPeliculas2023.Models.Usuario", "Usuario")
+                        .WithMany("Opiniones")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pelicula");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("WebApiPeliculas2023.Models.Pelicula", b =>
+                {
+                    b.Navigation("Opinion");
+                });
+
+            modelBuilder.Entity("WebApiPeliculas2023.Models.Usuario", b =>
+                {
+                    b.Navigation("Opiniones");
                 });
 #pragma warning restore 612, 618
         }
