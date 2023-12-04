@@ -13,11 +13,11 @@ namespace WebApiPeliculas2023.Controllers
 	public class GeneroController : Controller
 	{
 		private readonly ApplicationDbContext context;
-		private readonly IMapper _mapper;
+		private readonly IMapper _mapper; 
 		public GeneroController(IMapper mapper, ApplicationDbContext context)
 		{
 			_mapper = mapper;
-			this.context = context;
+			this.context = context; 
 		}
 		/*public GeneroController(ApplicationDbContext context)
 		{
@@ -45,7 +45,7 @@ namespace WebApiPeliculas2023.Controllers
 		[HttpPost("RegistrarGenero")]
 		public async Task<ActionResult> RegistrarGenero(AgregarGeneroDTO generoDTO)
 		{
-
+			
 			var existeGenero = await context.Generos.AnyAsync(x => x.Nombre == generoDTO.Nombre);
 			if (existeGenero)
 			{
@@ -63,20 +63,20 @@ namespace WebApiPeliculas2023.Controllers
 		{
 			var genero = await context.Generos.ToListAsync();
 			var generoDTO = _mapper.Map<List<Genero>>(genero);
-			return Ok(generoDTO);
+			return Ok(generoDTO); 
 		}
 
 		//Endpoint pa buscar inf de un genero especific
 		[HttpGet("GeneroEspecifico/{nombre}")]
 		public async Task<ActionResult<Genero>> GeneroEspecifico(string nombre)
 		{
-			var genero = await context.Generos.FirstOrDefaultAsync(x => x.Nombre == nombre);
+			var genero =await context.Generos.FirstOrDefaultAsync( x=> x.Nombre == nombre);
 			if (genero == null)
 			{
-				return NotFound();
+				return NotFound(); 
 			}
-			var generoDTO = _mapper.Map<Genero>(genero);
-			return Ok(generoDTO);
+			var generoDTO = _mapper.Map<Genero>(genero); 
+			return Ok(generoDTO); 
 		}
 		//put actualizar todo
 		//[HttpPut("ActualizarGenero/")]
@@ -102,18 +102,18 @@ namespace WebApiPeliculas2023.Controllers
 		public async Task<ActionResult> ModificarGenero(int id, Genero generoDTO)
 		{
 			var existe = await context.Generos.AnyAsync(x => x.Id == id);
-			if (!existe) return NotFound("El producto no existe");
+			if(!existe) return NotFound("El producto no existe");
 			var genero = _mapper.Map<Genero>(generoDTO);
-			context.Update(generoDTO);
+			context.Update(generoDTO); 
 			await context.SaveChangesAsync();
-			return Ok(generoDTO);
+			return Ok(generoDTO); 
 		}
 
-		/*Put profe
-		 * 
-		 */
-		//Endpoint pa eliminar un genero
-		[HttpDelete("EliminarGeneroDTO/{id:int}")]
+	/*Put profe
+	 * 
+	 */
+	//Endpoint pa eliminar un genero
+	[HttpDelete("EliminarGeneroDTO/{id:int}")]
 		public async Task<ActionResult> EliminarCategoria(int id, IMapper mapper)
 		{
 			var genero = await context.Generos.SingleOrDefaultAsync(z => z.Id == id);
@@ -124,7 +124,7 @@ namespace WebApiPeliculas2023.Controllers
 			var generoDTO = mapper.Map<Genero>(genero);
 			context.Remove(genero);
 			await context.SaveChangesAsync();
-			return Ok();
+			return Ok(); 
 		}
 	}
 }

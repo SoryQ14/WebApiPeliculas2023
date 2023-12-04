@@ -18,12 +18,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); //pruebas
 
 //A PARTIR DE AQUI AGREGO A PROGRAM conexion a la BD
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-/*pa sql
- * builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseUseSqlServe(builder.Configuration.GetConnectionString("DefaultConnection")));
- */
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//pa sql
+  builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+ 
 //Configurar la seguridad de la BD (se crea carpeta migracion)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext
 >().AddDefaultTokenProviders();
@@ -72,9 +72,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
+
 var app = builder.Build();
 //HASTA AQUI
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
